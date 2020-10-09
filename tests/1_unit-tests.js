@@ -21,10 +21,11 @@ suite("Unit Tests", () => {
   suite("Function translate(input, locale)", () => {
     suite("American to British English", () => {
       test("Mangoes are my favorite fruit. --> Mangoes are my favourite fruit.", done => {
-        const input = "Mangoes are my favorite fruit.";
-        const output = "Mangoes are my favourite fruit.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Mangoes are my favorite fruit.",
+          output = "Mangoes are my favourite fruit.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -32,10 +33,11 @@ suite("Unit Tests", () => {
       });
 
       test("I ate yogurt for breakfast. --> I ate yoghurt for breakfast.", done => {
-        const input = "I ate yogurt for breakfast.";
-        const output = "I ate yoghurt for breakfast.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "I ate yogurt for breakfast.",
+          output = "I ate yoghurt for breakfast.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -43,10 +45,11 @@ suite("Unit Tests", () => {
       });
 
       test("We had a party at my friend's condo. --> We had a party at my friend's flat.", done => {
-        const input = "We had a party at my friend's condo.";
-        const output = "We had a party at my friend's flat.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "We had a party at my friend's condo.",
+          output = "We had a party at my friend's flat.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -54,10 +57,11 @@ suite("Unit Tests", () => {
       });
 
       test("Can you toss this in the trashcan for me? --> Can you toss this in the bin for me?", done => {
-        const input = "Can you toss this in the trashcan for me?";
-        const output = "Can you toss this in the bin for me?";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Can you toss this in the trashcan for me?",
+          output = "Can you toss this in the bin for me?",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -65,10 +69,11 @@ suite("Unit Tests", () => {
       });
 
       test("The parking lot was full. --> The car park was full.", done => {
-        const input = "The parking lot was full.";
-        const output = "The car park was full.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "The parking lot was full.",
+          output = "The car park was full.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -76,10 +81,11 @@ suite("Unit Tests", () => {
       });
 
       test("Like a high tech Rube Goldberg machine. --> Like a high tech Heath Robinson device.", done => {
-        const input = "Like a high tech Rube Goldberg machine.";
-        const output = "Like a high tech Heath Robinson device.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Like a high tech Rube Goldberg machine.",
+          output = "Like a high tech Heath Robinson device.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -87,10 +93,11 @@ suite("Unit Tests", () => {
       });
 
       test("To play hooky means to skip class or work. --> To bunk off means to skip class or work.", done => {
-        const input = "To play hooky means to skip class or work.";
-        const output = "To bunk off means to skip class or work.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "To play hooky means to skip class or work.",
+          output = "To bunk off means to skip class or work.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -98,10 +105,11 @@ suite("Unit Tests", () => {
       });
 
       test("No Mr. Bond, I expect you to die. --> No Mr Bond, I expect you to die. ", done => {
-        const input = "No Mr. Bond, I expect you to die.";
-        const output = "No Mr Bond, I expect you to die.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "No Mr. Bond, I expect you to die.",
+          output = "No Mr Bond, I expect you to die.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -109,10 +117,11 @@ suite("Unit Tests", () => {
       });
 
       test("Dr. Grosh will see you now. --> Dr Grosh will see you now. ", done => {
-        const input = "Dr. Grosh will see you now.";
-        const output = "Dr Grosh will see you now.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Dr. Grosh will see you now.",
+          output = "Dr Grosh will see you now.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -120,10 +129,11 @@ suite("Unit Tests", () => {
       });
 
       test("Lunch is at 12:15 today. --> Lunch is at 12.15 today.", done => {
-        const input = "Lunch is at 12:15 today.";
-        const output = "Lunch is at 12.15 today.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Lunch is at 12:15 today.",
+          output = "Lunch is at 12.15 today.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "american-to-british");
         assert.strictEqual(translationDiv.textContent, output);
@@ -133,10 +143,11 @@ suite("Unit Tests", () => {
 
     suite("British to American English", () => {
       test("We watched the footie match for a while. --> We watched the soccer match for a while.", done => {
-        const input = "We watched the footie match for a while.";
-        const output = "We watched the soccer match for a while.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "We watched the footie match for a while.",
+          output = "We watched the soccer match for a while.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -144,10 +155,11 @@ suite("Unit Tests", () => {
       });
 
       test("Paracetamol takes up to an hour to work. --> Tylenol takes up to an hour to work.", done => {
-        const input = "Paracetamol takes up to an hour to work.";
-        const output = "Tylenol takes up to an hour to work.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Paracetamol takes up to an hour to work.",
+          output = "Tylenol takes up to an hour to work.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -155,10 +167,11 @@ suite("Unit Tests", () => {
       });
 
       test("First, caramelise the onions. --> First, caramelize the onions.", done => {
-        const input = "First, caramelise the onions.";
-        const output = "First, caramelize the onions.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "First, caramelise the onions.",
+          output = "First, caramelize the onions.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -166,10 +179,11 @@ suite("Unit Tests", () => {
       });
 
       test("I spent the bank holiday at the funfair. --> I spent the public holiday at the carnival.", done => {
-        const input = "I spent the bank holiday at the funfair.";
-        const output = "I spent the public holiday at the carnival.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "I spent the bank holiday at the funfair.",
+          output = "I spent the public holiday at the carnival.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -177,10 +191,11 @@ suite("Unit Tests", () => {
       });
 
       test("I had a bicky then went to the chippy. --> I had a cookie then went to the fish-and-chip shop.", done => {
-        const input = "I had a bicky then went to the chippy.";
-        const output = "I had a cookie then went to the fish-and-chip shop.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "I had a bicky then went to the chippy.",
+          output = "I had a cookie then went to the fish-and-chip shop.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -188,10 +203,11 @@ suite("Unit Tests", () => {
       });
 
       test("I've just got bits and bobs in my bum bag. --> I've just got odds and ends in my fanny pack.", done => {
-        const input = "I've just got bits and bobs in my bum bag.";
-        const output = "I've just got odds and ends in my fanny pack.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "I've just got bits and bobs in my bum bag.",
+          output = "I've just got odds and ends in my fanny pack.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -199,10 +215,11 @@ suite("Unit Tests", () => {
       });
 
       test("The car boot sale at Boxted Airfield was called off. --> The swap meet at Boxted Airfield was called off.", done => {
-        const input = "The car boot sale at Boxted Airfield was called off.";
-        const output = "The swap meet at Boxted Airfield was called off.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "The car boot sale at Boxted Airfield was called off.",
+          output = "The swap meet at Boxted Airfield was called off.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -210,10 +227,11 @@ suite("Unit Tests", () => {
       });
 
       test("Have you met Mrs Kalyani? --> Have you met Mrs. Kalyani?", done => {
-        const input = "Have you met Mrs Kalyani?";
-        const output = "Have you met Mrs. Kalyani?";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Have you met Mrs Kalyani?",
+          output = "Have you met Mrs. Kalyani?",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -221,10 +239,11 @@ suite("Unit Tests", () => {
       });
 
       test("Prof Joyner of King's College, London. --> Prof. Joyner of King's College, London.", done => {
-        const input = "Prof Joyner of King's College, London.";
-        const output = "Prof. Joyner of King's College, London.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Prof Joyner of King's College, London.",
+          output = "Prof. Joyner of King's College, London.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);
@@ -232,10 +251,11 @@ suite("Unit Tests", () => {
       });
 
       test("Tea time is usually around 4 or 4.30. --> Tea time is usually around 4 or 4:30.", done => {
-        const input = "Tea time is usually around 4 or 4.30.";
-        const output = "Tea time is usually around 4 or 4:30.";
-        const textArea = document.getElementById("text-input");
-        const translationDiv = document.getElementById("translated-sentence");
+        const input = "Tea time is usually around 4 or 4.30.",
+          output = "Tea time is usually around 4 or 4:30.",
+          textArea = document.querySelector("#text-input"),
+          translationDiv = document.querySelector("#translated-sentence");
+
         textArea.value = input;
         Translator.translate(input, "british-to-american");
         assert.strictEqual(translationDiv.textContent, output);

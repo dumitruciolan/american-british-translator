@@ -12,17 +12,13 @@ suite("Functional Tests", () => {
   });
 
   suite("Function translate(input, locale)", () => {
-    /* 
-      The translated sentence is appended to the `translated-sentence` `div`
-      and the translated words or terms are wrapped in 
-      `<span class="highlight">...</span>` tags when the "Translate" button is pressed.
-    */
-    
+    // The translated sentence is appended to the `translated-sentence` `div` and the translated words or
+    // terms are wrapped in `<span class="highlight">...</span> tags when the "Translate" button is pressed.
     test("Translation appended to the `translated-sentence` `div`", done => {
-      const textArea = document.getElementById("text-input");
-      const translationDiv = document.getElementById("translated-sentence");
       const output =
-        'freeCodeCamp is my <span class="highlight">favourite.</span>';
+          'freeCodeCamp is my <span class="highlight">favourite.</span>',
+        translationDiv = document.querySelector("#translated-sentence"),
+        textArea = document.querySelector("#text-input");
 
       // Simulate click
       textArea.value = "freeCodeCamp is my favorite.";
@@ -32,15 +28,12 @@ suite("Functional Tests", () => {
       done();
     });
 
-    /* 
-      If there are no words or terms that need to be translated,
-      the message 'Everything looks good to me!' is appended to the
-      `translated-sentence` `div` when the "Translate" button is pressed.
-    */
+    // If there are no words or terms that need to be translated,the message 'Everything looks good to me!'
+    // is appended to the `translated-sentence` `div` when the "Translate" button is pressed.
     test("'Everything looks good to me!' message appended to the `translated-sentence` `div`", done => {
-      const textArea = document.getElementById("text-input");
-      const translationDiv = document.getElementById("translated-sentence");
-      const output = "Everything looks good to me!";
+      const output = "Everything looks good to me!",
+        textArea = document.querySelector("#text-input"),
+        translationDiv = document.querySelector("#translated-sentence");
 
       // Simulate click
       textArea.value = "freeCodeCamp is awesome.";
@@ -50,15 +43,12 @@ suite("Functional Tests", () => {
       done();
     });
 
-    /* 
-      If the text area is empty when the "Translation" button is
-      pressed, append the message 'Error: No text to translate.' to 
-      the `error-msg` `div`.
-    */
+    // If the text area is empty when the "Translation" button is pressed,
+    // append the message 'Error: No text to translate.' to the `error-msg` `div`.
     test("'Error: No text to translate.' message appended to the `translated-sentence` `div`", done => {
-      const textArea = document.getElementById("text-input");
-      const errorDiv = document.getElementById("error-msg");
-      const output = "Error: No text to translate.";
+      const output = "Error: No text to translate.",
+        textArea = document.querySelector("#text-input"),
+        errorDiv = document.querySelector("#error-msg");
 
       // Simulate click
       textArea.value = "";
@@ -70,14 +60,12 @@ suite("Functional Tests", () => {
   });
 
   suite("Function clearAll()", () => {
-    /* 
-      The text area and both the `translated-sentence` and `error-msg`
-      `divs` are cleared when the "Clear" button is pressed.
-    */
+    // The text area and both the `translated-sentence` and `error-msg`
+    // `divs` are cleared when the "Clear" button is pressed.
     test("Text area, `translated-sentence`, and `error-msg` are cleared", done => {
-      const textArea = document.getElementById("text-input");
-      const translationDiv = document.getElementById("translated-sentence");
-      const errorDiv = document.getElementById("error-msg");
+      const textArea = document.querySelector("#text-input"),
+        translationDiv = document.querySelector("#translated-sentence"),
+        errorDiv = document.querySelector("#error-msg");
 
       // Simulate translation
       textArea.value = "biro";
