@@ -9,13 +9,10 @@ const translatedBox = document.querySelector("#translated-sentence"),
   selector = document.querySelector("#locale-select"),
   clearButton = document.querySelector("#clear-btn"),
   textBox = document.querySelector("#text-input"),
-  errorBox = document.querySelector("#error-msg");
-
-let timeString = textBox.value,
-  mode = "american-to-british",
-  timeRegex = /(([0-9]|0[0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]))/g,
-  times = timeString.match(timeRegex),
+  errorBox = document.querySelector("#error-msg"),
+  timeString = textBox.value,
   translationList = [];
+let mode = "american-to-british";
 
 const objectFlip = obj => {
   const ret = {};
@@ -24,8 +21,8 @@ const objectFlip = obj => {
 };
 
 // aligning all translated words in the right k:v order
-const britishToAmericanSpelling = objectFlip(americanToBritishSpelling),
-  americanToBritishDict = { ...americanToBritishSpelling, ...americanOnly },
+const americanToBritishDict = { ...americanToBritishSpelling, ...americanOnly },
+  britishToAmericanSpelling = objectFlip(americanToBritishSpelling),
   britishToAmericanDict = { ...britishToAmericanSpelling, ...britishOnly },
   britishToAmericanTitles = objectFlip(americanToBritishTitles);
 
@@ -52,46 +49,30 @@ const translate = (text, mode) => {
       (translatedBox.textContent = "")
     );
 
-  var ans = text.split(/\s+/g);
+  let ans = text.split(/\s+/g), dictionary, dictionaryTitles;
 
-  var dict, dictTitles;
   if (mode === "american-to-british") {
-    dict = americanToBritishDict;
-    dictTitles = americanToBritishTitles;
-  } else if (mode === "british-to-american") {
-    dict = britishToAmericanDict;
-    dictTitles = britishToAmericanTitles;
+    dictionary = americanToBritishDict;
+    dictionaryTitles = americanToBritishTitles;
+  } else {
+    dictionary = britishToAmericanDict;
+    dictionaryTitles = britishToAmericanTitles;
   }
 
-  //strToTranslateArr will contain words to change that is a string (not individual word),
-  //used in section ### Translate String (with lookahead) ###
+  // strToTranslateArr will contain words to change that is a string,
+  // (not individual word) used in section Translate String (with lookahead)
   const strToTranslateArr = [];
-  Object.keys(dict).forEach(key => {
-    if (key.includes(" ")) {
-      if (text.toLowerCase().includes(key)) {
-        strToTranslateArr.push(key);
-      }
-    }
+  Object.keys(dictionary).forEach(key => {
+    if (key.includes(" "))
+      if (text.toLowerCase().includes(key)) strToTranslateArr.push(key);
   });
 
   ans.forEach((word, index, objAns) => {
-    let cleanWord = word.replace(/[,.;!?]/g, ""); //clean out punctuations from word for Translate Word
+    const cleanWord = word.replace(/[,.;!?]/g, ""); //clean out punctuations from word for Translate Word
+    const timeRegex = /(([0-9]|0[0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]))/g;
+    const times = timeString.match(timeRegex);
 
-    let american24TimeRegex = /([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/;
-    let british24TimeRegex = /([0-9]|0[0-9]|1[0-9]|2[0-3])\.[0-5][0-9]/;
-
-    var timeRegexResult, tempTimeRegexResult;
-    if (mode === "american-to-british") {
-      timeRegexResult = word.match(american24TimeRegex);
-      if (timeRegexResult) {
-        tempTimeRegexResult = timeRegexResult[0].replace(":", ".");
-      }
-    } else if (mode === "british-to-american") {
-      timeRegexResult = word.match(british24TimeRegex);
-      if (timeRegexResult) {
-        tempTimeRegexResult = timeRegexResult[0].replace(".", ":");
-      }
-    }
+    let timeRegexResult, tempTimeRegexResult;
 
     // time replacement (user story 3)
     if (times)
@@ -107,33 +88,39 @@ const translate = (text, mode) => {
           ))
       );
 
-    // ### Translate Time ###
+    if (mode === "american-to-british") {
+      timeRegexResult = word.match(timeRegex);
+      if (timeRegexResult)
+        tempTimeRegexResult = timeRegexResult[0].replace(":", ".");
+    } else {
+      timeRegexResult = word.match(timeRegex);
+      if (timeRegexResult)
+        tempTimeRegexResult = timeRegexResult[0].replace(".", ":");
+    }
+
+    // Translate Time
     if (timeRegexResult) {
-      let newTime = word.replace(timeRegexResult[0], tempTimeRegexResult); // to preserve punctuation in original word
+      const newTime = word.replace(timeRegexResult[0], tempTimeRegexResult); // to preserve punctuation in original word
       return (ans[index] = `<span class='highlight'>${newTime}</span>`); //adding green highlight
     }
 
-    // ### Translate Titles ###
-    else if (dictTitles.hasOwnProperty(word.toLowerCase())) {
+    // Translate Titles
+    else if (dictionaryTitles.hasOwnProperty(word.toLowerCase())) {
       let tempWord;
 
-      if (word[0] === word[0].toUpperCase()) {
+      if (word[0] === word[0].toUpperCase())
         //check for capitalized initial word
         tempWord =
-          dictTitles[word.toLowerCase()].charAt(0).toUpperCase() +
-          dictTitles[word.toLowerCase()].slice(1);
-      } else {
-        tempWord = dictTitles[word.toLowerCase()];
-      }
+          dictionaryTitles[word.toLowerCase()].charAt(0).toUpperCase() +
+          dictionaryTitles[word.toLowerCase()].slice(1);
+      else tempWord = dictionaryTitles[word.toLowerCase()];
+
       return (ans[index] = `<span class='highlight'>${tempWord}</span>`); //adding green highlight
     }
 
-    // ### Translate String (with lookahead) ###
+    // Translate String (with lookahead)
     else if (strToTranslateArr.length > 0) {
-      let indexLookAhead = 0;
-      let strToTranslate;
-      let tempWord;
-      let tempStrLookAhead = word;
+      let indexLookAhead = 0, tempWord, tempStrLookAhead = word;
 
       strToTranslateArr.forEach((key, i, obj) => {
         if (key.startsWith(tempStrLookAhead.toLowerCase())) {
@@ -147,21 +134,19 @@ const translate = (text, mode) => {
               ans[index + indexLookAhead]
             ); // concat space and next word
 
-            let cleanTempStrLookAhead = tempStrLookAhead.replace(
+            const cleanTempStrLookAhead = tempStrLookAhead.replace(
               /[,.;!?]/g,
               ""
             );
 
             if (key === cleanTempStrLookAhead.toLowerCase()) {
-              if (tempStrLookAhead[0] === tempStrLookAhead[0].toUpperCase()) {
+              if (tempStrLookAhead[0] === tempStrLookAhead[0].toUpperCase())
                 //check for capitalized initial word
                 tempWord =
-                  dict[key].charAt(0).toUpperCase() + dict[key].slice(1);
-              } else {
-                tempWord = dict[key];
-              }
+                  dictionary[key].charAt(0).toUpperCase() + dictionary[key].slice(1);
+              else tempWord = dictionary[key];
 
-              let newStr = tempStrLookAhead.replace(
+              const newStr = tempStrLookAhead.replace(
                 cleanTempStrLookAhead,
                 tempWord
               ); //replace the tempWord into the newWord, preserving all punctuations
@@ -176,30 +161,26 @@ const translate = (text, mode) => {
       });
     }
 
-    // ### Translate Word ###
-    else if (dict.hasOwnProperty(cleanWord.toLowerCase())) {
+    // Translate Word
+    else if (dictionary.hasOwnProperty(cleanWord.toLowerCase())) {
       let tempWord;
 
-      if (word[0] === word[0].toUpperCase()) {
+      if (word[0] === word[0].toUpperCase())
         //check for capitalized initial word
         tempWord =
-          dict[cleanWord.toLowerCase()].charAt(0).toUpperCase() +
-          dict[cleanWord.toLowerCase()].slice(1);
-      } else {
-        tempWord = dict[cleanWord.toLowerCase()];
-      }
+          dictionary[cleanWord.toLowerCase()].charAt(0).toUpperCase() +
+          dictionary[cleanWord.toLowerCase()].slice(1);
+      else tempWord = dictionary[cleanWord.toLowerCase()];
 
-      let newWord = word.replace(cleanWord, tempWord); //replace the tempWord into the newWord, preserving all punctuations
+      const newWord = word.replace(cleanWord, tempWord); //replace the tempWord into the newWord, preserving all punctuations
       return (ans[index] = `<span class='highlight'>${newWord}</span>`); //adding green highlight
     }
 
-    // ### No Match ###
-    else {
-      return (ans[index] = word);
-    }
+    // No Match
+    else return (ans[index] = word);
   });
 
-  var newString = ans.join(" ");
+  const newString = ans.join(" ");
 
   //   user story 6
   if (newString === text)
@@ -208,8 +189,7 @@ const translate = (text, mode) => {
       (errorBox.textContent = "")
     );
   // user story 2
-  else
-    return (translatedBox.innerHTML = newString), (errorBox.textContent = "");
+  return (translatedBox.innerHTML = newString), (errorBox.textContent = "");
 
   mode === "american-to-british"
     ? translationList.forEach(
@@ -229,9 +209,8 @@ const translate = (text, mode) => {
 };
 
 // user story 1
-translateButton.onchange = () => {
-  let text = textBox.value,
-    mode = selector.value;
+translateButton.onclick = () => {
+  const text = textBox.value, mode = selector.value;
   translate(text, mode);
 };
 
@@ -247,10 +226,7 @@ clearButton.onclick = clearAll;
 // Export your functions for testing in Node.
 // `try` prevents errors on  the client side
 try {
-  module.exports = {
-    translate,
-    clearAll
-  };
+  module.exports = { translate, clearAll };
 } catch (e) {
   console.log(e);
 }
