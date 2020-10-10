@@ -6,8 +6,8 @@ const chai = require("chai"),
 let Translator;
 
 suite("Functional Tests", () => {
+  // DOM already mocked -- load translator then run tests
   suiteSetup(() => {
-    // DOM already mocked -- load translator then run tests
     Translator = require("../public/translator.js");
   });
 
@@ -23,7 +23,6 @@ suite("Functional Tests", () => {
       // Simulate click
       textArea.value = "freeCodeCamp is my favorite.";
       Translator.translate(textArea.value, "american-to-british");
-
       assert.strictEqual(translationDiv.innerHTML, output);
       done();
     });
@@ -31,14 +30,11 @@ suite("Functional Tests", () => {
     // If there are no words or terms that need to be translated,the message 'Everything looks good to me!'
     // is appended to the `translated-sentence` `div` when the "Translate" button is pressed.
     test("'Everything looks good to me!' message appended to the `translated-sentence` `div`", done => {
-      const output = "Everything looks good to me!",
-        textArea = document.querySelector("#text-input"),
-        translationDiv = document.querySelector("#translated-sentence");
+      const translationDiv = document.querySelector("#translated-sentence"),
+        output = "Everything looks good to me!";
 
       // Simulate click
-      textArea.value = "freeCodeCamp is awesome.";
-      Translator.translate(textArea.value, "american-to-british");
-
+      Translator.translate("freeCodeCamp is awesome.", "american-to-british");
       assert.strictEqual(translationDiv.innerHTML, output);
       done();
     });
@@ -46,15 +42,11 @@ suite("Functional Tests", () => {
     // If the text area is empty when the "Translation" button is pressed,
     // append the message 'Error: No text to translate.' to the `error-msg` `div`.
     test("'Error: No text to translate.' message appended to the `translated-sentence` `div`", done => {
-      const output = "Error: No text to translate.",
-        textArea = document.querySelector("#text-input"),
-        errorDiv = document.querySelector("#error-msg");
+      const output = "Error: No text to translate.";
 
       // Simulate click
-      textArea.value = "";
-      Translator.translate(textArea.value, "american-to-british");
-
-      assert.strictEqual(errorDiv.innerHTML, output);
+      Translator.translate("", "american-to-british");
+      assert.equal(document.querySelector("#error-msg").innerHTML, output);
       done();
     });
   });
@@ -63,21 +55,16 @@ suite("Functional Tests", () => {
     // The text area and both the `translated-sentence` and `error-msg`
     // `divs` are cleared when the "Clear" button is pressed.
     test("Text area, `translated-sentence`, and `error-msg` are cleared", done => {
-      const textArea = document.querySelector("#text-input"),
-        translationDiv = document.querySelector("#translated-sentence"),
-        errorDiv = document.querySelector("#error-msg");
+      const errorDiv = document.querySelector("#error-msg"),
+        translationDiv = document.querySelector("#translated-sentence");
 
-      // Simulate translation
-      textArea.value = "biro";
-      translationDiv.textContent = "ballpoint pen";
-
-      // Simulate error message
+      // Simulate translation, error message & button click
+      document.querySelector("#text-input").value = "biro";
       errorDiv.textContent = "Error: No text to translate.";
-
-      // Simulate clicks
+      translationDiv.textContent = "ballpoint pen";
       Translator.clearAll();
 
-      assert.strictEqual(textArea.value, "");
+      assert.strictEqual(document.querySelector("#text-input").value, "");
       assert.strictEqual(translationDiv.innerHTML, "");
       assert.strictEqual(errorDiv.textContent, "");
       done();
