@@ -8,8 +8,7 @@ const chai = require("chai"),
 let Translator;
 
 const translate = (inputString, targetInput, mode) => {
-  const inputElem = document.querySelector(targetInput);
-  inputElem.value = inputString;
+  document.querySelector(targetInput).value = inputString;
   Translator.translate(inputString, mode);
 };
 
