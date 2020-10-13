@@ -1,4 +1,4 @@
-// -----[Keep the tests in the same order!]----
+// -----[Keep the tests in the same order!]---- 
 // (if additional are added, keep them at the very end!)
 
 const chai = require("chai"),
@@ -7,22 +7,18 @@ let Translator;
 
 suite("Functional Tests", () => {
   // DOM already mocked -- load translator then run tests
-  suiteSetup(() => {
-    Translator = require("../public/translator.js");
-  });
+  suiteSetup(() => (Translator = require("../public/translator.js")));
 
   suite("Function translate(input, locale)", () => {
     // The translated sentence is appended to the `translated-sentence` `div` and the translated words or
     // terms are wrapped in `<span class="highlight">...</span> tags when the "Translate" button is pressed.
     test("Translation appended to the `translated-sentence` `div`", done => {
-      const output =
-          'freeCodeCamp is my <span class="highlight">favourite.</span>',
-        translationDiv = document.querySelector("#translated-sentence"),
-        textArea = document.querySelector("#text-input");
+      const translationDiv = document.querySelector("#translated-sentence"),
+        output = 'freeCodeCamp is my <span class="highlight">favourite.</span>',
+        input = "freeCodeCamp is my favorite.";
 
       // Simulate click
-      textArea.value = "freeCodeCamp is my favorite.";
-      Translator.translate(textArea.value, "american-to-british");
+      Translator.convert(input, "#text-input", "american-to-british");
       assert.strictEqual(translationDiv.innerHTML, output);
       done();
     });
@@ -31,10 +27,11 @@ suite("Functional Tests", () => {
     // is appended to the `translated-sentence` `div` when the "Translate" button is pressed.
     test("'Everything looks good to me!' message appended to the `translated-sentence` `div`", done => {
       const translationDiv = document.querySelector("#translated-sentence"),
-        output = "Everything looks good to me!";
+        output = "Everything looks good to me!",
+        input = "freeCodeCamp is awesome.";
 
       // Simulate click
-      Translator.translate("freeCodeCamp is awesome.", "american-to-british");
+      Translator.convert(input, "#text-input", "american-to-british");
       assert.strictEqual(translationDiv.innerHTML, output);
       done();
     });
@@ -45,7 +42,7 @@ suite("Functional Tests", () => {
       const output = "Error: No text to translate.";
 
       // Simulate click
-      Translator.translate("", "american-to-british");
+      Translator.convert("", "#text-input", "american-to-british");
       assert.equal(document.querySelector("#error-msg").innerHTML, output);
       done();
     });
@@ -59,14 +56,14 @@ suite("Functional Tests", () => {
         translationDiv = document.querySelector("#translated-sentence");
 
       // Simulate translation, error message & button click
-      document.querySelector("#text-input").value = "biro";
       errorDiv.textContent = "Error: No text to translate.";
+      document.querySelector("#text-input").value = "biro";
       translationDiv.textContent = "ballpoint pen";
       Translator.clearAll();
 
+      assert.strictEqual(document.querySelector("#error-msg").textContent, "");
       assert.strictEqual(document.querySelector("#text-input").value, "");
       assert.strictEqual(translationDiv.innerHTML, "");
-      assert.strictEqual(errorDiv.textContent, "");
       done();
     });
   });

@@ -11,6 +11,14 @@ const translatedBox = document.querySelector("#translated-sentence"),
   textBox = document.querySelector("#text-input"),
   errorBox = document.querySelector("#error-msg");
 
+// words capitalization
+const checkCapitalization = (key, dict) => {
+  return key[0] === key[0].toUpperCase()
+    ? dict[key.toLowerCase()].charAt(0).toUpperCase() +
+        dict[key.toLowerCase()].slice(1)
+    : dict[key.toLowerCase()];
+};
+
 // aligning words in the right k:v order
 const flipKeysAndValues = obj => {
   const result = {};
@@ -68,16 +76,11 @@ const translate = (text, mode) => {
       return (ans[index] = `<span class='highlight'>${newTime}</span>`); //adding green highlight
     }
 
-    // translate titles
+    // translate titles & adding green highlight
     else if (dictionaryTitles.hasOwnProperty(word.toLowerCase())) {
       //check for capitalized initial word
-      tempWord =
-        word[0] === word[0].toUpperCase()
-          ? dictionaryTitles[word.toLowerCase()].charAt(0).toUpperCase() +
-            dictionaryTitles[word.toLowerCase()].slice(1)
-          : dictionaryTitles[word.toLowerCase()];
-
-      return (ans[index] = `<span class='highlight'>${tempWord}</span>`); //adding green highlight
+      tempWord = checkCapitalization(word, dictionaryTitles);
+      return (ans[index] = `<span class='highlight'>${tempWord}</span>`);
     }
 
     // Translate String (with lookahead)
@@ -104,11 +107,7 @@ const translate = (text, mode) => {
 
             //check for capitalized initial word
             if (key === cleanTempStrLookAhead.toLowerCase()) {
-              tempWord =
-                tempStrLookAhead[0] === tempStrLookAhead[0].toUpperCase()
-                  ? dictionary[key].charAt(0).toUpperCase() +
-                    dictionary[key].slice(1)
-                  : dictionary[key];
+              tempWord = checkCapitalization(key, dictionary);
 
               const newStr = tempStrLookAhead.replace(
                 cleanTempStrLookAhead,
@@ -127,12 +126,7 @@ const translate = (text, mode) => {
     // Translate Word
     else if (dictionary.hasOwnProperty(cleanWord.toLowerCase())) {
       //check for capitalized initial word
-      tempWord =
-        word[0] === word[0].toUpperCase()
-          ? dictionary[cleanWord.toLowerCase()].charAt(0).toUpperCase() +
-            dictionary[cleanWord.toLowerCase()].slice(1)
-          : dictionary[cleanWord.toLowerCase()];
-
+      tempWord = checkCapitalization(cleanWord, dictionary);
       const newWord = word.replace(cleanWord, tempWord); //replace the tempWord into the newWord, preserving all punctuations
       return (ans[index] = `<span class='highlight'>${newWord}</span>`); //adding green highlight
     }
@@ -156,19 +150,24 @@ const translate = (text, mode) => {
 // user story 1
 translateButton.onclick = () => translate(textBox.value, selector.value);
 
+// used by tests to avoid repetition
+const convert = (inputString, targetInput, mode) => {
+  document.querySelector(targetInput).value = inputString;
+  translate(inputString, mode);
+};
+
 // user story 8
 const clearAll = () => (
   (textBox.value = ""),
   (translatedBox.innerHTML = ""),
   (errorBox.textContent = "")
 );
-
 clearButton.onclick = clearAll;
 
 // Export your functions for testing in Node.
 // `try` prevents errors on  the client side
 try {
-  module.exports = { translate, clearAll };
+  module.exports = { convert, clearAll };
 } catch (e) {
   console.log(e);
 }
