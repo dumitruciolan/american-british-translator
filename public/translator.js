@@ -3,15 +3,12 @@ import { americanToBritishSpelling } from "./american-to-british-spelling.js";
 import { americanToBritishTitles } from "./american-to-british-titles.js";
 import { britishOnly } from "./british-only.js";
 
-// select required elements
-const translatedBox = document.querySelector("#translated-sentence"),
-  translateButton = document.querySelector("#translate-btn"),
+// select the required elements
+const translateButton = document.querySelector("#translate-btn"),
   selector = document.querySelector("#locale-select"),
-  clearButton = document.querySelector("#clear-btn"),
-  textBox = document.querySelector("#text-input"),
-  errorBox = document.querySelector("#error-msg");
+  textBox = document.querySelector("#text-input");
 
-// words capitalization
+// check word capitalization
 const checkCapitalization = (key, dict) => {
   return key[0] === key[0].toUpperCase()
     ? dict[key.toLowerCase()].charAt(0).toUpperCase() +
@@ -19,7 +16,14 @@ const checkCapitalization = (key, dict) => {
     : dict[key.toLowerCase()];
 };
 
-// aligning words in the right k:v order
+// insert the provided text in the boxes
+const fillBoxes = (inputText, translatedText, errorText) => (
+  (document.querySelector("#text-input").value = inputText),
+  (document.querySelector("#translated-sentence").innerHTML = translatedText),
+  (document.querySelector("#error-msg").textContent = errorText)
+);
+
+// align words in the right k:v order
 const flipKeysAndValues = obj => {
   const result = {};
   Object.keys(obj).forEach(key => (result[obj[key]] = key));
@@ -33,16 +37,13 @@ const americanToBritishDict = { ...americanToBritishSpelling, ...americanOnly },
 
 // main function
 const translate = (text, mode) => {
-  //   user story 7
-  if (text === "")
-    return (
-      (errorBox.textContent = "Error: No text to translate."),
-      (translatedBox.textContent = "")
-    );
+  // user story 7
+  if (text === "") return fillBoxes("", "", "Error: No text to translate.");
 
   let ans = text.split(/\s+/g),
     dictionary,
     dictionaryTitles;
+  const stringsToTranslateArr = [];
 
   if (mode === "american-to-british") {
     dictionary = americanToBritishDict;
@@ -52,17 +53,16 @@ const translate = (text, mode) => {
     dictionaryTitles = britishToAmericanTitles;
   }
 
-  // strToTranslateArr will contain words to change that is a string,
+  // strToTranslateArr contain words to change that is a string,
   // (not individual word) used in section Translate String (with lookahead)
-  const strToTranslateArr = [];
   Object.keys(dictionary).forEach(key => {
     if (key.includes(" ") && text.toLowerCase().includes(key))
-      strToTranslateArr.push(key);
+      stringsToTranslateArr.push(key);
   });
 
   ans.forEach((word, index, objAns) => {
     const timeRegex = /(([0-9]|0[0-9]|1[0-9]|2[0-3])(:|\.)([0-5][0-9]))/g,
-      cleanWord = word.replace(/[,.;!?]/g, ""), //clean out word punctuations
+      cleanWord = word.replace(/[,.;!?]/g, ""), // clears word punctuation
       timeRegexResult = word.match(timeRegex);
     let tempTimeRegexResult, newTime, tempWord;
 
@@ -71,30 +71,29 @@ const translate = (text, mode) => {
       mode === "american-to-british"
         ? (tempTimeRegexResult = timeRegexResult[0].replace(":", "."))
         : (tempTimeRegexResult = timeRegexResult[0].replace(".", ":"));
-      newTime = word.replace(timeRegexResult[0], tempTimeRegexResult); // to preserve punctuation in original word
+      newTime = word.replace(timeRegexResult[0], tempTimeRegexResult); // preserves punctuation in original word
 
-      return (ans[index] = `<span class='highlight'>${newTime}</span>`); //adding green highlight
+      return (ans[index] = `<span class='highlight'>${newTime}</span>`); // adding green highlight
     }
 
-    // translate titles & adding green highlight
+    // check capitalization, translate titles & add green highlight
     else if (dictionaryTitles.hasOwnProperty(word.toLowerCase())) {
-      //check for capitalized initial word
       tempWord = checkCapitalization(word, dictionaryTitles);
       return (ans[index] = `<span class='highlight'>${tempWord}</span>`);
     }
 
-    // Translate String (with lookahead)
-    else if (strToTranslateArr.length > 0) {
+    // translate string (with lookahead)
+    else if (stringsToTranslateArr.length > 0) {
       let indexLookAhead = 0,
         tempStrLookAhead = word;
 
-      strToTranslateArr.forEach((key, i, obj) => {
+      stringsToTranslateArr.forEach((key, i, obj) => {
         if (key.startsWith(tempStrLookAhead.toLowerCase())) {
           while (
             tempStrLookAhead.length <= key.length &&
             index + indexLookAhead <= text.length
           ) {
-            indexLookAhead++; //increment lookahead index
+            indexLookAhead++; // increment lookahead index
             tempStrLookAhead = tempStrLookAhead.concat(
               " ",
               ans[index + indexLookAhead]
@@ -105,46 +104,40 @@ const translate = (text, mode) => {
               ""
             );
 
-            //check for capitalized initial word
+            // check for capitalized initial word
             if (key === cleanTempStrLookAhead.toLowerCase()) {
               tempWord = checkCapitalization(key, dictionary);
 
               const newStr = tempStrLookAhead.replace(
                 cleanTempStrLookAhead,
                 tempWord
-              ); //replace the tempWord into the newWord, preserving all punctuations
-              ans[index] = `<span class='highlight'>${newStr}</span>`; //adding green highlight
-              obj.splice(i, 1); //drop element from strToTranslateArr, saving computing time when next word is indexed in ans.forEach
-              objAns.splice(index + 1, indexLookAhead); //drop element that has been "looked ahead" from ans array
-              return (index = index + indexLookAhead); //modify index
+              ); // replace the tempWord into the newWord, preserving all punctuations
+              ans[index] = `<span class='highlight'>${newStr}</span>`; // adding green highlight
+              obj.splice(i, 1); // drop element from strToTranslateArr, saving computing time when next word is indexed in ans.forEach
+              objAns.splice(index + 1, indexLookAhead); // drop element that has been "looked ahead" from ans array
+              return (index = index + indexLookAhead); // modify index
             }
           }
         }
       });
     }
 
-    // Translate Word
+    // check for capitalization & translate the word
     else if (dictionary.hasOwnProperty(cleanWord.toLowerCase())) {
-      //check for capitalized initial word
       tempWord = checkCapitalization(cleanWord, dictionary);
-      const newWord = word.replace(cleanWord, tempWord); //replace the tempWord into the newWord, preserving all punctuations
+      const newWord = word.replace(cleanWord, tempWord); //replace the tempWord with newWord, preserving all punctuations
       return (ans[index] = `<span class='highlight'>${newWord}</span>`); //adding green highlight
     }
 
-    // No Match
+    // if there's no match
     else return (ans[index] = word);
   });
 
-  const newString = ans.join(" ");
+  // user story 6
+  if (ans.join(" ") === text)
+    return fillBoxes(text, "Everything looks good to me!", "");
 
-  //   user story 6
-  if (newString === text)
-    return (
-      (translatedBox.innerHTML = "Everything looks good to me!"),
-      (errorBox.textContent = "")
-    );
-  // user story 2
-  return (translatedBox.innerHTML = newString), (errorBox.textContent = "");
+  return fillBoxes(text, ans.join(" "), "");
 };
 
 // user story 1
@@ -157,12 +150,8 @@ const convert = (inputString, targetInput, mode) => {
 };
 
 // user story 8
-const clearAll = () => (
-  (textBox.value = ""),
-  (translatedBox.innerHTML = ""),
-  (errorBox.textContent = "")
-);
-clearButton.onclick = clearAll;
+const clearAll = () => fillBoxes("", "", "");
+document.querySelector("#clear-btn").onclick = clearAll;
 
 // Export your functions for testing in Node.
 // `try` prevents errors on  the client side
