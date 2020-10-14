@@ -1,4 +1,4 @@
-// -----[Keep the tests in the same order!]---- 
+// -----[Keep the tests in the same order!]----
 // (if additional are added, keep them at the very end!)
 
 const chai = require("chai"),
@@ -17,7 +17,6 @@ suite("Functional Tests", () => {
         output = 'freeCodeCamp is my <span class="highlight">favourite.</span>',
         input = "freeCodeCamp is my favorite.";
 
-      // Simulate click
       Translator.convert(input, "#text-input", "american-to-british");
       assert.strictEqual(translationDiv.innerHTML, output);
       done();
@@ -30,7 +29,6 @@ suite("Functional Tests", () => {
         output = "Everything looks good to me!",
         input = "freeCodeCamp is awesome.";
 
-      // Simulate click
       Translator.convert(input, "#text-input", "american-to-british");
       assert.strictEqual(translationDiv.innerHTML, output);
       done();
@@ -41,7 +39,6 @@ suite("Functional Tests", () => {
     test("'Error: No text to translate.' message appended to the `translated-sentence` `div`", done => {
       const output = "Error: No text to translate.";
 
-      // Simulate click
       Translator.convert("", "#text-input", "american-to-british");
       assert.equal(document.querySelector("#error-msg").innerHTML, output);
       done();
